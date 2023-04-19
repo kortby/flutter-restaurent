@@ -9,7 +9,7 @@ class MealItem extends StatelessWidget {
   final String duration;
   final String complexity;
   final String affordability;
-  final Function removeItem;
+  final Function? removeItem;
 
   const MealItem({
     Key? key,
@@ -19,7 +19,7 @@ class MealItem extends StatelessWidget {
     required this.duration,
     required this.complexity,
     required this.affordability,
-    required this.removeItem,
+    this.removeItem,
   }) : super(key: key);
 
   String? get complexityText {
@@ -57,7 +57,7 @@ class MealItem extends StatelessWidget {
             arguments: id,
           )
           .then((result) => {
-                if (result != null) {removeItem(result)}
+                if (result != null) {removeItem!(result)}
               });
     }
 

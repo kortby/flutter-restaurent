@@ -27,6 +27,7 @@ class _MyAppState extends State<MyApp> {
   };
 
   List<Meal> _availableMeals = MEALS;
+  List<Meal> _favoritesMeals = [];
 
   void _setFilters(Map<String, bool> filterData) {
     setState(() {
@@ -49,10 +50,27 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _toggleFavorite(String mealId) {
+    final existIdx = _favoritesMeals.indexWhere((meal) => meal.id == mealId);
+    if (existIdx >= 0) {
+      setState(() {
+        _favoritesMeals.removeAt(existIdx);
+      });
+    } else {
+      setState(() {
+        _favoritesMeals.add(MEALS.firstWhere((meal) => meal.id == mealId));
+      });
+    }
+  }
+
+  bool _isMealFavorite(String mealId) {
+    return _favoritesMeals.any((meal) => meal.id == mealId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'DealMeal',
       theme: ThemeData(
         primarySwatch: Colors.pink,
         accentColor: Colors.amber,
@@ -75,11 +93,16 @@ class _MyAppState extends State<MyApp> {
       // home: const Categories(),
       initialRoute: '/',
       routes: {
-        '/': (ctx) => const Tabs(),
+        '/': (ctx) => Tabs(
+              favoriteMeals: _favoritesMeals,
+            ),
         CategoryMeals.routeName: (ctx) => CategoryMeals(
               availableMeals: _availableMeals,
             ),
-        MealDetail.routeName: (ctx) => const MealDetail(),
+        MealDetail.routeName: (ctx) => MealDetail(
+              toggleFavorite: _toggleFavorite,
+              isFavorite: _isMealFavorite,
+            ),
         Filters.routeName: (ctx) => Filters(
               saveFilters: _setFilters,
               currentFilters: _filters,

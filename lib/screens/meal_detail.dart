@@ -4,6 +4,13 @@ import 'package:meal/data.dart';
 class MealDetail extends StatelessWidget {
   static const routeName = '/meal-detail';
 
+  final Function toggleFavorite;
+  final Function isFavorite;
+
+  const MealDetail(
+      {Key? key, required this.toggleFavorite, required this.isFavorite})
+      : super(key: key);
+
   Widget buildSectionTitle(BuildContext context, String text) {
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -32,8 +39,6 @@ class MealDetail extends StatelessWidget {
       child: child,
     );
   }
-
-  const MealDetail({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,12 +95,10 @@ class MealDetail extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        onPressed: () => toggleFavorite(mealId),
         child: Icon(
-          Icons.delete,
+          isFavorite(mealId) ? Icons.star : Icons.star_border,
         ),
-        onPressed: () {
-          Navigator.of(context).pop(mealId);
-        },
       ),
     );
   }
